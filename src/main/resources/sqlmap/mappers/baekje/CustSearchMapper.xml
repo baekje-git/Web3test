@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="custSearch">
+    <select id="selectcustSearchCount" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        /* custSearch.selectcustSearchCount*/
+        SELECT CAST(IFNULL(COUNT(1), 0) AS VARCHAR(20)) AS CNT
+            FROM T_CUST AS A INNER JOIN T_BRANCH B ON A.BRCH_CD = B.BRCH_CD
+            <bind name="custNm" value='"%" + custNm + "%"'/>
+            WHERE A.CUST_NM LIKE #{custNm}
+            
+            
+        
+        
+    </select>
+
+    <select id="selectcustSearchList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        /* custSearch.selectcustSearchList 품목수불 리스트 */
+        SELECT A.CUST_CD
+            , A.CUST_NM
+            , B.BRCH_NM
+            , DAMO.SCP_DECB64('SCP_ALL', A.CUST_ADDRESS) AS CUST_ADDRESS
+            , A.ZIP_CD 
+            , A.BRCH_CD
+            , CASE  WHEN A.DEAL_END_YN = 'N' THEN '사용' ELSE '중지'  END as DEAL_END_YN  
+            , A.DEAL_END_DT    
+            FROM T_CUST AS A INNER JOIN T_BRANCH B ON A.BRCH_CD = B.BRCH_CD
+             <bind name="custNm" value='"%" + custNm + "%"'/>
+            WHERE A.CUST_NM LIKE #{custNm}
+
+    </select>
+</mapper>
